@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <title>Ink OCR MVP (한글/수식)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- KaTeX (LaTeX 렌더) -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
+        integrity="sha256-kp3V77iY8s7K9kqJ5xgk2u9m3p2BR4kq0wGmJYI3zJ8=" crossorigin="anonymous">
+  <script defer
+        src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"
+        integrity="sha256-1x2b0c7dqd4mBrz1QnEqCkGFg1+W3q+8r2oXz0H1C0s=" crossorigin="anonymous"></script>
+  <!-- Tesseract.js (한글 OCR) - v2 안정판 사용 -->
+  <script defer src="https://cdn.jsdelivr.net/npm/tesseract.js@2/dist/tesseract.min.js"></script>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <header>
+    <h1>✍️ Ink OCR MVP — 한글/수식</h1>
+    <div class="toolbar">
+      <button id="clearBtn">지우기 (Esc)</button>
+      <label>펜 굵기 <input id="penSize" type="range" min="1" max="8" value="3"></label>
+      <label>펜 색상 <input id="penColor" type="color" value="#000000"></label>
+      <button id="recognizeBtn">인식 (Enter)</button>
+      <button id="recognizeAllBtn">전체 인식 (Shift+Enter)</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="left">
+      <div class="canvas-wrap">
+        <canvas id="ink" width="900" height="600"></canvas>
+      </div>
+      <div class="status" id="status">대기 중</div>
+      <div class="hint">
+        단축키: P(펜), E(지우개), Enter(인식), Shift+Enter(전체), Ctrl/Cmd+C(복사), Ctrl/Cmd+S(JSON 저장)
+      </div>
+    </section>
+
+    <section class="right">
+      <div class="tabs">
+        <button data-tab="text" class="active">텍스트</button>
+        <button data-tab="latex">LaTeX</button>
+        <button data-tab="preview">미리보기</button>
+        <button data-tab="json">JSON</button>
+      </div>
+      <div class="panel" id="panel-text"><pre id="textOut">(여기에 텍스트 결과)</pre></div>
+      <div class="panel hidden" id="panel-latex"><pre id="latexOut">(여기에 LaTeX 결과)</pre></div>
+      <div class="panel hidden" id="panel-preview"><div id="previewOut">(여기에 수식 미리보기)</div></div>
+      <div class="panel hidden" id="panel-json"><pre id="jsonOut">{}</pre></div>
+
+      <div class="export">
+        <button id="copyBtn">현재 탭 복사 (Ctrl/Cmd+C)</button>
+        <button id="saveTxt">TXT 저장</button>
+        <button id="saveTex">TEX 저장</button>
+        <button id="saveJson">JSON 저장</button>
+      </div>
+
+      <div class="confidence">
+        <label><input type="checkbox" id="lowConfToggle" checked> 낮은 신뢰도(0.85↓) 하이라이트</label>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <small>※ 수식 OCR은 현재 MVP: 간단 규칙 변환 + LaTeX 렌더. 추후 전문 엔진으로 교체 가능.</small>
+  </footer>
+
+  <script defer src="./app.js"></script>
+</body>
+</html>
